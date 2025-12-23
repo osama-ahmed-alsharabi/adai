@@ -1,7 +1,8 @@
+import 'package:adai/core/router/app_router.dart';
 import 'package:flutter/material.dart';
 
-void main(){
- runApp(const Adai());
+void main() {
+  runApp(const Adai());
 }
 
 class Adai extends StatelessWidget {
@@ -9,9 +10,9 @@ class Adai extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return MaterialApp.router(
       debugShowCheckedModeBanner: false,
-      home: Scaffold(),
+      routerConfig: AppRouter.router,
     );
   }
 }
