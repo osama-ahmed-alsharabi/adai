@@ -1,6 +1,7 @@
 import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:adai/core/utils/app_color.dart';
 
 class SplashView extends StatefulWidget {
@@ -89,8 +90,20 @@ class _SplashViewState extends State<SplashView>
       ),
     );
 
-    _controller.forward().then((_) {
-      context.go('/bracelet-test');
+    _controller.forward().then((_) async {
+      await Future.delayed(const Duration(milliseconds: 1500));
+      if (!mounted) return;
+
+      final prefs = await SharedPreferences.getInstance();
+      final onboardingCompleted =
+          prefs.getBool('onboarding_completed') ?? false;
+
+      if (!mounted) return;
+      if (onboardingCompleted) {
+        context.go('/bracelet-test');
+      } else {
+        context.go('/onboarding');
+      }
     });
   }
 
@@ -103,66 +116,82 @@ class _SplashViewState extends State<SplashView>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColor.primaryColor,
-      body: Stack(
-        fit: StackFit.expand,
-        children: [
-          // Background with Fade
-          FadeTransition(
-            opacity: _fadeBackgroundAnimation,
-            child: Image.asset(
-              "assets/images/splash_image.png",
-              // fit: BoxFit.cover,
-            ),
+      body: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomCenter,
+            colors: [
+              AppColor.primaryColor,
+              AppColor.primaryColor,
+              // AppColor.primaryColor,
+              // AppColor.secondaryColor,
+              AppColor.secondaryColor,
+            ],
           ),
+        ),
+        child: Stack(
+          fit: StackFit.expand,
+          children: [
+            // Background with Fade
+            FadeTransition(
+              opacity: _fadeBackgroundAnimation,
+              child: Image.asset(
+                "assets/images/splash_image.png",
+                // fit: BoxFit.cover,
+              ),
+            ),
 
-          // Rotating and Scaling White Box / Logo
-          Center(
-            child: AnimatedBuilder(
-              animation: _controller,
-              builder: (context, child) {
-                // Determine if we show the white box or the logo based on progress
-                bool showLogo = _controller.value > 0.7;
+            // Rotating and Scaling White Box / Logo
+            Center(
+              child: AnimatedBuilder(
+                animation: _controller,
+                builder: (context, child) {
+                  // Determine if we show the white box or the logo based on progress
+                  bool showLogo = _controller.value > 0.7;
 
-                return Transform.scale(
-                  scale: _scaleAnimation.value,
-                  child: Transform.rotate(
-                    angle: _rotateAnimation.value * 2 * math.pi,
-                    child: showLogo
-                        ? FadeTransition(
-                            opacity: _fadeLogoAnimation,
-                            child: Container(
-                              width: 100,
-                              height: 100,
-                              decoration: BoxDecoration(
-                                // color: Colors.white,
-                                borderRadius: BorderRadius.circular(20),
-                                boxShadow: const [
-                                  BoxShadow(
-                                    color: Colors.black12,
-                                    blurRadius: 10,
-                                    offset: Offset(0, 5),
-                                  ),
-                                ],
+                  return Transform.scale(
+                    scale: _scaleAnimation.value,
+                    child: Transform.rotate(
+                      angle: _rotateAnimation.value * 2 * math.pi,
+                      child: showLogo
+                          ? FadeTransition(
+                              opacity: _fadeLogoAnimation,
+                              child: Container(
+                                width: 100,
+                                height: 100,
+                                decoration: BoxDecoration(
+                                  // color: Colors.white,
+                                  borderRadius: BorderRadius.circular(20),
+                                  boxShadow: const [
+                                    BoxShadow(
+                                      color: Colors.black12,
+                                      blurRadius: 10,
+                                      offset: Offset(0, 5),
+                                    ),
+                                  ],
+                                ),
+                                padding: const EdgeInsets.all(16),
+                                child: Image.asset(
+                                  "assets/images/app_logo.png",
+                                ),
                               ),
-                              padding: const EdgeInsets.all(16),
-                              child: Image.asset("assets/images/app_logo.png"),
+                            )
+                          : Container(
+                              width: 80, // Initial white box size
+                              height: 80,
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(15),
+                              ),
                             ),
-                          )
-                        : Container(
-                            width: 80, // Initial white box size
-                            height: 80,
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(15),
-                            ),
-                          ),
-                  ),
-                );
-              },
+                    ),
+                  );
+                },
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

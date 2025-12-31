@@ -1,8 +1,9 @@
 import 'package:adai/core/utils/app_color.dart';
+import 'package:adai/core/utils/app_const.dart';
 import 'package:flutter/material.dart';
 
 ThemeData light({Color color = AppColor.primaryColor}) => ThemeData(
-  // fontFamily: AppConst.fontFamily,
+  fontFamily: AppConst.fontFamily,
   scaffoldBackgroundColor: Color(0xffF5F5F5),
   primaryColor: color,
   secondaryHeaderColor: AppColor.secondaryColor,

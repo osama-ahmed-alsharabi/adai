@@ -1,3 +1,3 @@
 abstract class AppConst {
-  static const String fontFamily = "";
+  static const String fontFamily = "DGHeaven";
 }
