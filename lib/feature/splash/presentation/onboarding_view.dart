@@ -11,7 +11,7 @@ class OnboardingView extends StatelessWidget {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setBool('onboarding_completed', true);
     if (context.mounted) {
-      context.go('/bracelet-test');
+      context.go('/login');
     }
   }
 

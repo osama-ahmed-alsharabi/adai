@@ -100,7 +100,7 @@ class _SplashViewState extends State<SplashView>
 
       if (!mounted) return;
       if (onboardingCompleted) {
-        context.go('/bracelet-test');
+        context.go('/login');
       } else {
         context.go('/onboarding');
       }
