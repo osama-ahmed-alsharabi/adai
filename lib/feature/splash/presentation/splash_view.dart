@@ -1,5 +1,6 @@
 import 'dart:math' as math;
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:adai/core/utils/app_color.dart';
 
 class SplashView extends StatefulWidget {
@@ -89,8 +90,7 @@ class _SplashViewState extends State<SplashView>
     );
 
     _controller.forward().then((_) {
-      // Navigate after animation
-      // GoRouter.of(context).go('/onboarding'); // Verify route later
+      context.go('/bracelet-test');
     });
   }
 

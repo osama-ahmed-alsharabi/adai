@@ -17,4 +17,5 @@ abstract class AppRouterConst {
   static const String ludoGameViewRouteName = "ludoGame";
   static const String forceUpdateViewRouteName = "forceUpdate";
   static const String appStoppedViewRouteName = "appStoppedView";
+  static const String braceletTestViewRouteName = "braceletTest";
 }
