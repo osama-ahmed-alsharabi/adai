@@ -15,7 +15,10 @@ class LoginAppBarWidget extends StatelessWidget {
             height: 150,
           ),
         ),
-        Image.asset(AppAsset.loginSpeedBackgroundImage),
+        SizedBox(
+          height: 150,
+          child: Center(child: Image.asset(AppAsset.loginSpeedBackgroundImage)),
+        ),
         Center(child: Image.asset(AppAsset.hiCharacterImageGIF, height: 180)),
       ],
     );

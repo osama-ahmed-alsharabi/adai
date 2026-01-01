@@ -10,4 +10,6 @@ abstract class AppAsset {
       "$imagesPath/login_speed_background.png";
   static const String loginAppBarBackgroundImage =
       "$imagesPath/login_app_bar_background.png";
+  static const String loginBottomBackgroundImage =
+      "$imagesPath/login_bottom_background.png";
 }
