@@ -1,6 +1,7 @@
 import 'package:adai/core/utils/app_asset.dart';
 import 'package:adai/core/utils/app_color.dart';
 import 'package:adai/feature/login/presentation/view/widgets/login_app_bar_widget.dart';
+import 'package:adai/feature/login/presentation/view/widgets/login_form_container_widget.dart';
 import 'package:flutter/material.dart';
 
 class LoginBodyWidget extends StatelessWidget {
@@ -8,6 +9,9 @@ class LoginBodyWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // حساب ارتفاع الكيبورد لإضافة padding مناسب
+    final bottomInset = MediaQuery.of(context).viewInsets.bottom;
+
     return Container(
       decoration: BoxDecoration(
         gradient: LinearGradient(
@@ -16,68 +20,30 @@ class LoginBodyWidget extends StatelessWidget {
           colors: [
             AppColor.primaryColor,
             AppColor.primaryColor,
-            // AppColor.primaryColor,
-            // AppColor.secondaryColor,
             AppColor.secondaryColor,
           ],
         ),
       ),
-      child: Column(
-        children: [
-          const LoginAppBarWidget(),
-          const Spacer(),
-          FormLoginWidget(),
-          const Spacer(),
-          Image.asset(AppAsset.loginBottomBackgroundImage),
-        ],
-      ),
-    );
-  }
-}
-
-class FormLoginWidget extends StatelessWidget {
-  const FormLoginWidget({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16),
-      child: Column(
-        children: [
-          Text(
-            textAlign: TextAlign.right,
-            "مرحبــاً",
-            style: TextStyle(
-              fontSize: 24,
-              fontWeight: FontWeight.bold,
-              color: Colors.white,
+      child: SingleChildScrollView(
+        // يجعل الـ scroll يعمل تلقائياً عند فتح الكيبورد
+        keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+        padding: EdgeInsets.only(bottom: bottomInset),
+        child: ConstrainedBox(
+          constraints: BoxConstraints(
+            minHeight: MediaQuery.of(context).size.height,
+          ),
+          child: IntrinsicHeight(
+            child: Column(
+              children: [
+                const LoginAppBarWidget(),
+                const SizedBox(height: 20),
+                const FormLoginWidget(),
+                const Spacer(), // الآن Spacer يعمل لأن IntrinsicHeight يعطي bounded constraints
+                Image.asset(AppAsset.loginBottomBackgroundImage),
+              ],
             ),
           ),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 8.0,
-                  vertical: 6,
-                ),
-                child: Text("label", style: TextStyle(color: Colors.white)),
-              ),
-              TextFormField(
-                decoration: InputDecoration(
-                  fillColor: Colors.white,
-                  filled: true,
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(25),
-                  ),
-                  hintText: "Enter your email",
-                  hintStyle: TextStyle(color: Colors.grey, fontSize: 12),
-                  prefixIcon: Icon(Icons.email),
-                ),
-              ),
-            ],
-          ),
-        ],
+        ),
       ),
     );
   }

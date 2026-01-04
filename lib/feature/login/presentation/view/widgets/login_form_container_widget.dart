@@ -1,201 +1,151 @@
-// import 'package:flutter/material.dart';
-// import 'package:adai/core/utils/app_color.dart';
+import 'package:adai/feature/login/data/models/role_type.dart';
+import 'package:adai/feature/login/presentation/view/widgets/custom_login_button_widget.dart';
+import 'package:adai/feature/login/presentation/view/widgets/custom_text_login_field_widget.dart';
+import 'package:adai/feature/login/presentation/view/widgets/custom_text_password_login_field_widget.dart';
+import 'package:adai/feature/login/presentation/view/widgets/role_selection/role_selection_widget.dart';
+import 'package:flutter/material.dart';
 
-// class LoginWaveContainer extends StatelessWidget {
-//   const LoginWaveContainer({super.key});
+class FormLoginWidget extends StatefulWidget {
+  const FormLoginWidget({super.key});
 
-//   @override
-//   Widget build(BuildContext context) {
-//     return Expanded(
-//       child: ClipPath(
-//         clipper: LoginExactWaveClipper(),
-//         child: Container(
-//           width: double.infinity,
-//           color: AppColor.primaryColor,
-//           padding: const EdgeInsets.fromLTRB(
-//             24,
-//             80,
-//             24,
-//             0,
-//           ), // Increased top padding
-//           child: Column(
-//             crossAxisAlignment: CrossAxisAlignment.end,
-//             children: [
-//               // Welcome Text
-//               const Text(
-//                 'مرحباً',
-//                 style: TextStyle(
-//                   color: Colors.white,
-//                   fontSize: 28,
-//                   fontWeight: FontWeight.bold,
-//                   fontFamily: 'DGHeaven',
-//                 ),
-//               ),
-//               const SizedBox(height: 8),
-//               const Text(
-//                 'قم بتسجيل الدخول..',
-//                 style: TextStyle(color: Color(0xFFB1B1B1), fontSize: 16),
-//               ),
+  @override
+  State<FormLoginWidget> createState() => _FormLoginWidgetState();
+}
 
-//               const SizedBox(height: 32),
+class _FormLoginWidgetState extends State<FormLoginWidget> {
+  RoleType? _selectedRole;
 
-//               // Phone Number Field
-//               _buildLabel('رقم الجوال'),
-//               const SizedBox(height: 8),
-//               _buildTextField(
-//                 hint: 'قم بإدخال رقم الجوال',
-//                 icon: Icons.mail_outline,
-//               ),
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 24),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          const SizedBox(height: 16),
+          // قسم اختيار الدور
+          RoleSelectionWidget(
+            selectedRole: _selectedRole,
+            onRoleSelected: (role) {
+              setState(() {
+                _selectedRole = role;
+              });
+            },
+          ),
+          // عرض حقول الإدخال بعد اختيار الدور
+          AnimatedSize(
+            duration: const Duration(milliseconds: 400),
+            curve: Curves.easeOutCubic,
+            child: _selectedRole != null
+                ? _buildLoginFields()
+                : const SizedBox.shrink(),
+          ),
+        ],
+      ),
+    );
+  }
 
-//               const SizedBox(height: 24),
+  Widget _buildLoginFields() {
+    return AnimatedOpacity(
+      opacity: _selectedRole != null ? 1.0 : 0.0,
+      duration: const Duration(milliseconds: 300),
+      child: Column(
+        key: ValueKey(_selectedRole),
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const SizedBox(height: 32),
+          // خط فاصل خفيف
+          Container(
+            height: 1,
+            margin: const EdgeInsets.symmetric(horizontal: 40),
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                colors: [
+                  Colors.transparent,
+                  Colors.white.withValues(alpha: 0.2),
+                  Colors.transparent,
+                ],
+              ),
+            ),
+          ),
+          const SizedBox(height: 28),
+          // رسالة ترحيب
+          // _buildWelcomeText(),
+          const SizedBox(height: 24),
+          // حقل الايميل
+          const CustomTextLoginFieldWidget(
+            label: "الايميل",
+            hintText: "قم بإدخال الايميل",
+          ),
+          const SizedBox(height: 16),
+          // حقل كلمة المرور
+          const CustomTextPasswordLoginFieldWidget(
+            label: "كلمة المرور",
+            hintText: "قم بإدخال كلمة المرور",
+          ),
+          // رابط نسيت كلمة المرور
+          Align(
+            alignment: Alignment.centerLeft,
+            child: TextButton(
+              style: TextButton.styleFrom(
+                foregroundColor: Colors.white.withValues(alpha: 0.7),
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+              ),
+              onPressed: () {},
+              child: Text(
+                "نسيت كلمة المرور؟",
+                style: TextStyle(
+                  color: Colors.white.withValues(alpha: 0.7),
+                  fontSize: 13,
+                  fontWeight: FontWeight.w400,
+                ),
+              ),
+            ),
+          ),
+          const SizedBox(height: 20),
+          // زر تسجيل الدخول
+          CustomLoginButtonWidget(
+            onPressed: _selectedRole != null ? () => _handleLogin() : null,
+          ),
+          const SizedBox(height: 24),
+        ],
+      ),
+    );
+  }
 
-//               // Password Field
-//               _buildLabel('كلمة المرور'),
-//               const SizedBox(height: 8),
-//               _buildTextField(
-//                 hint: 'قم بإدخال كلمة المرور',
-//                 icon: Icons.lock_outline,
-//                 isPassword: true,
-//               ),
+  Widget _buildWelcomeText() {
+    final roleText = _selectedRole == RoleType.player
+        ? 'أيها اللاعب'
+        : 'أيها المدرب';
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          "أهلاً $roleText",
+          textAlign: TextAlign.right,
+          style: const TextStyle(
+            fontSize: 20,
+            fontWeight: FontWeight.w600,
+            color: Colors.white,
+          ),
+        ),
+        const SizedBox(height: 4),
+        Text(
+          "سجّل دخولك للمتابعة",
+          textAlign: TextAlign.right,
+          style: TextStyle(
+            fontSize: 14,
+            fontWeight: FontWeight.w400,
+            color: Colors.white.withValues(alpha: 0.65),
+          ),
+        ),
+      ],
+    );
+  }
 
-//               const SizedBox(height: 16),
-
-//               // Forgot Password
-//               const Text(
-//                 'نسيت كلمة المرور؟',
-//                 style: TextStyle(
-//                   color: Colors.white,
-//                   fontSize: 14,
-//                   fontWeight: FontWeight.bold,
-//                 ),
-//               ),
-
-//               const SizedBox(height: 32),
-
-//               // Login Button
-//               Container(
-//                 width: double.infinity,
-//                 height: 55,
-//                 decoration: BoxDecoration(
-//                   color: const Color(0xFF8A8ED8),
-//                   borderRadius: BorderRadius.circular(30),
-//                 ),
-//                 child: Row(
-//                   mainAxisAlignment: MainAxisAlignment.center,
-//                   children: const [
-//                     Icon(Icons.arrow_back, color: Colors.white),
-//                     SizedBox(width: 8),
-//                     Text(
-//                       'تسجـيــل الدخــــول',
-//                       style: TextStyle(
-//                         color: Colors.white,
-//                         fontSize: 18,
-//                         fontWeight: FontWeight.bold,
-//                       ),
-//                     ),
-//                   ],
-//                 ),
-//               ),
-
-//               const SizedBox(height: 16),
-
-//               // Create Account Link
-//               Row(
-//                 mainAxisAlignment: MainAxisAlignment.center,
-//                 children: [
-//                   const Text(
-//                     'إنشاء حساب',
-//                     style: TextStyle(
-//                       color: Color(0xFF8A8ED8),
-//                       fontWeight: FontWeight.bold,
-//                     ),
-//                   ),
-//                   const Text(
-//                     'لا تمتلك حساب؟ ',
-//                     style: TextStyle(color: Colors.white),
-//                   ),
-//                 ],
-//               ),
-//             ],
-//           ),
-//         ),
-//       ),
-//     );
-//   }
-
-//   Widget _buildLabel(String text) {
-//     return Text(
-//       text,
-//       style: const TextStyle(
-//         color: Colors.white,
-//         fontSize: 16,
-//         fontWeight: FontWeight.bold,
-//       ),
-//     );
-//   }
-
-//   Widget _buildTextField({
-//     required String hint,
-//     required IconData icon,
-//     bool isPassword = false,
-//   }) {
-//     return Container(
-//       decoration: BoxDecoration(
-//         color: Colors.white,
-//         borderRadius: BorderRadius.circular(30),
-//       ),
-//       child: TextField(
-//         textAlign: TextAlign.right,
-//         obscureText: isPassword,
-//         decoration: InputDecoration(
-//           hintText: hint,
-//           hintStyle: const TextStyle(color: Colors.grey, fontSize: 12),
-//           prefixIcon: isPassword
-//               ? const Icon(
-//                   Icons.visibility_outlined,
-//                   color: AppColor.primaryColor,
-//                 )
-//               : null,
-//           suffixIcon: Icon(icon, color: AppColor.primaryColor),
-//           border: InputBorder.none,
-//           contentPadding: const EdgeInsets.symmetric(
-//             horizontal: 20,
-//             vertical: 15,
-//           ),
-//         ),
-//       ),
-//     );
-//   }
-// }
-
-// class LoginExactWaveClipper extends CustomClipper<Path> {
-//   @override
-//   Path getClip(Size size) {
-//     var h = size.height;
-//     var w = size.width;
-//     final path = Path();
-
-//     // Top Curve: Starts lower at sides (50), Peaks at center (0)
-//     // This creates a Hill / Convex shape
-//     path.moveTo(0, 50);
-//     path.quadraticBezierTo(
-//       w / 2,
-//       -20,
-//       w,
-//       50,
-//     ); // Control point higher than 0 to make it rounder
-
-//     // Right Side
-//     path.lineTo(w, h - 80);
-
-//     // Bottom Curve: Convex Down
-//     // Starts (w, h-80), Lowest (w/2, h), Ends (0, h-80)
-//     path.quadraticBezierTo(w / 2, h + 20, 0, h - 80);
-
-//     path.close();
-//     return path;
-//   }
-
-//   @override
-//   bool shouldReclip(CustomClipper<Path> oldClipper) => false;
-// }
+  void _handleLogin() {
+    // TODO: Implement login logic based on selected role
+    debugPrint('Login as: ${_selectedRole?.arabicName}');
+  }
+}

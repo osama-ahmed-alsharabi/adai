@@ -6,6 +6,14 @@ class LoginView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(body: SafeArea(child: LoginBodyWidget()));
+    return GestureDetector(
+      // إخفاء الكيبورد عند النقر خارج حقول الإدخال
+      onTap: () => FocusScope.of(context).unfocus(),
+      child: Scaffold(
+        // يسمح للشاشة بالتكيف مع ارتفاع الكيبورد
+        resizeToAvoidBottomInset: true,
+        body: const SafeArea(child: LoginBodyWidget()),
+      ),
+    );
   }
 }

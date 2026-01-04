@@ -12,4 +12,8 @@ abstract class AppAsset {
       "$imagesPath/login_app_bar_background.png";
   static const String loginBottomBackgroundImage =
       "$imagesPath/login_bottom_background.png";
+
+  // Role Selection Assets
+  static const String playerIcon = "$imagesPath/player_icon.png";
+  static const String coachIcon = "$imagesPath/coach_icon.png";
 }
