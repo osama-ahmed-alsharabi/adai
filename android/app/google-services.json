@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1037039845782",
+    "project_id": "adai-431f8",
+    "storage_bucket": "adai-431f8.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1037039845782:android:09a5ed37258f0e20e71db7",
+        "android_client_info": {
+          "package_name": "com.example.adai"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDY1vSx3ofJyJPmrpxiFMN0KHJZdaME470"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

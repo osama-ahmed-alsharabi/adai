@@ -20,7 +20,7 @@ class LoginBodyWidget extends StatelessWidget {
           colors: [
             AppColor.primaryColor,
             AppColor.primaryColor,
-            AppColor.secondaryColor,
+            // AppColor.secondaryColor,
           ],
         ),
       ),

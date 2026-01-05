@@ -1,9 +1,12 @@
+import 'package:adai/core/router/app_router_const.dart';
+import 'package:adai/core/utils/app_color.dart';
 import 'package:adai/feature/login/data/models/role_type.dart';
 import 'package:adai/feature/login/presentation/view/widgets/custom_login_button_widget.dart';
 import 'package:adai/feature/login/presentation/view/widgets/custom_text_login_field_widget.dart';
 import 'package:adai/feature/login/presentation/view/widgets/custom_text_password_login_field_widget.dart';
 import 'package:adai/feature/login/presentation/view/widgets/role_selection/role_selection_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class FormLoginWidget extends StatefulWidget {
   const FormLoginWidget({super.key});
@@ -24,93 +27,85 @@ class _FormLoginWidgetState extends State<FormLoginWidget> {
         mainAxisSize: MainAxisSize.min,
         children: [
           const SizedBox(height: 16),
-          // قسم اختيار الدور
-          RoleSelectionWidget(
-            selectedRole: _selectedRole,
-            onRoleSelected: (role) {
-              setState(() {
-                _selectedRole = role;
-              });
-            },
+          Text(
+            "مرحبــاً",
+            style: TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+              color: Colors.white,
+            ),
           ),
-          // عرض حقول الإدخال بعد اختيار الدور
-          AnimatedSize(
-            duration: const Duration(milliseconds: 400),
-            curve: Curves.easeOutCubic,
-            child: _selectedRole != null
-                ? _buildLoginFields()
-                : const SizedBox.shrink(),
+          Text(
+            "قم بتسجيل الدخول..",
+            style: TextStyle(color: AppColor.secondaryColor, fontSize: 16),
           ),
+          _buildLoginFields(),
         ],
       ),
     );
   }
 
   Widget _buildLoginFields() {
-    return AnimatedOpacity(
-      opacity: _selectedRole != null ? 1.0 : 0.0,
-      duration: const Duration(milliseconds: 300),
-      child: Column(
-        key: ValueKey(_selectedRole),
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const SizedBox(height: 32),
-          // خط فاصل خفيف
-          Container(
-            height: 1,
-            margin: const EdgeInsets.symmetric(horizontal: 40),
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                colors: [
-                  Colors.transparent,
-                  Colors.white.withValues(alpha: 0.2),
-                  Colors.transparent,
-                ],
+    return Column(
+      key: ValueKey(_selectedRole),
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const SizedBox(height: 32),
+        // خط فاصل خفيف
+        Container(
+          height: 1,
+          margin: const EdgeInsets.symmetric(horizontal: 40),
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: [
+                Colors.transparent,
+                Colors.white.withValues(alpha: 0.2),
+                Colors.transparent,
+              ],
+            ),
+          ),
+        ),
+        const SizedBox(height: 28),
+        // رسالة ترحيب
+        // _buildWelcomeText(),
+        const SizedBox(height: 24),
+        // حقل الايميل
+        const CustomTextLoginFieldWidget(
+          label: "الايميل",
+          hintText: "قم بإدخال الايميل",
+        ),
+        const SizedBox(height: 16),
+        // حقل كلمة المرور
+        const CustomTextPasswordLoginFieldWidget(
+          label: "كلمة المرور",
+          hintText: "قم بإدخال كلمة المرور",
+        ),
+        // رابط نسيت كلمة المرور
+        Align(
+          alignment: Alignment.centerLeft,
+          child: TextButton(
+            style: TextButton.styleFrom(
+              foregroundColor: Colors.white.withValues(alpha: 0.7),
+              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+            ),
+            onPressed: () {},
+            child: Text(
+              "نسيت كلمة المرور؟",
+              style: TextStyle(
+                color: Colors.white.withValues(alpha: 0.7),
+                fontSize: 13,
+                fontWeight: FontWeight.w400,
               ),
             ),
           ),
-          const SizedBox(height: 28),
-          // رسالة ترحيب
-          // _buildWelcomeText(),
-          const SizedBox(height: 24),
-          // حقل الايميل
-          const CustomTextLoginFieldWidget(
-            label: "الايميل",
-            hintText: "قم بإدخال الايميل",
-          ),
-          const SizedBox(height: 16),
-          // حقل كلمة المرور
-          const CustomTextPasswordLoginFieldWidget(
-            label: "كلمة المرور",
-            hintText: "قم بإدخال كلمة المرور",
-          ),
-          // رابط نسيت كلمة المرور
-          Align(
-            alignment: Alignment.centerLeft,
-            child: TextButton(
-              style: TextButton.styleFrom(
-                foregroundColor: Colors.white.withValues(alpha: 0.7),
-                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-              ),
-              onPressed: () {},
-              child: Text(
-                "نسيت كلمة المرور؟",
-                style: TextStyle(
-                  color: Colors.white.withValues(alpha: 0.7),
-                  fontSize: 13,
-                  fontWeight: FontWeight.w400,
-                ),
-              ),
-            ),
-          ),
-          const SizedBox(height: 20),
-          // زر تسجيل الدخول
-          CustomLoginButtonWidget(
-            onPressed: _selectedRole != null ? () => _handleLogin() : null,
-          ),
-          const SizedBox(height: 24),
-        ],
-      ),
+        ),
+        const SizedBox(height: 20),
+        // زر تسجيل الدخول
+        CustomLoginButtonWidget(
+          onPressed: _selectedRole != null ? () => _handleLogin() : null,
+        ),
+        const SizedBox(height: 24),
+      ],
     );
   }
 
@@ -145,6 +140,7 @@ class _FormLoginWidgetState extends State<FormLoginWidget> {
   }
 
   void _handleLogin() {
+    context.goNamed(AppRouterConst.homeViewViewRouteName);
     // TODO: Implement login logic based on selected role
     debugPrint('Login as: ${_selectedRole?.arabicName}');
   }

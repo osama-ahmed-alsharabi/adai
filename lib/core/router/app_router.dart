@@ -1,6 +1,7 @@
 import 'package:adai/core/router/app_router_const.dart';
 import 'package:adai/core/router/page_transitions.dart';
 import 'package:adai/core/widgets/status_bar_widget.dart';
+import 'package:adai/feature/home/presentation/view/home_view.dart';
 import 'package:adai/feature/login/presentation/view/login_view.dart';
 import 'package:adai/feature/splash/presentation/splash_view.dart';
 import 'package:adai/feature/splash/presentation/onboarding_view.dart';
@@ -44,6 +45,15 @@ class AppRouter {
         pageBuilder: (context, state) => CustomTransitionPage(
           key: state.pageKey,
           child: StatusBarWidget(child: const LoginView()),
+          transitionsBuilder: PageTransitions.fadeTransition,
+        ),
+      ),
+      GoRoute(
+        path: '/home',
+        name: AppRouterConst.homeViewViewRouteName,
+        pageBuilder: (context, state) => CustomTransitionPage(
+          key: state.pageKey,
+          child: StatusBarWidget(child: const HomeView()),
           transitionsBuilder: PageTransitions.fadeTransition,
         ),
       ),
